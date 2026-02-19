@@ -10,12 +10,13 @@ public class CubeFollower : MonoBehaviour
 
     void Start()
     {
-        offset = player.transform.position - transform.position;
+        offset = transform.position - player.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = player.transform.position + offset;
+        transform.LookAt(player.transform);
     }
 }

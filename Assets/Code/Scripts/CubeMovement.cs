@@ -1,17 +1,33 @@
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem;
 
 public class CubeMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private InputAction moveAction;
+    private InputAction jumpAction;
+    [SerializeField] private Vector3 velocity;
+
+    private void Start()
     {
-        transform.position = Vector3.zero;
+        moveAction = InputSystem.actions.FindAction("move");
+        jumpAction = InputSystem.actions.FindAction("jump");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.position += (Vector3.right + Vector3.forward) * Time.deltaTime;
+        Vector2 moveValue = moveAction.ReadValue<Vector2>();
+        velocity = new Vector3(moveValue.x, 0, moveValue.y);
+
+        if(jumpAction.IsPressed())
+        {
+            velocity += new Vector3(0, 2, 0);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        transform.position += velocity * Time.fixedDeltaTime;
+
+        velocity -= new Vector3 (0, 1, 0);
     }
 }
